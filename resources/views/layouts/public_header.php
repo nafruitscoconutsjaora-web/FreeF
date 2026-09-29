@@ -4,7 +4,7 @@
  * ONLY public links: Home, Services, Categories, About, Contact, Login, Get Started
  * STRICTLY NO WALLET BALANCE, NO NOTIFICATIONS, NO USER AVATAR/PROFILE DROPDOWN, NO LOGOUT.
  */
-$isLoggedIn = !empty($_SESSION['user_id']);
+$isLoggedIn = !empty($_SESSION['user_id']) && !empty($_SESSION['user_logged_in']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,6 +33,8 @@ $isLoggedIn = !empty($_SESSION['user_id']);
       }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="stylesheet" href="/css/app.css">
     <style>
       body { background-color: #080B11; color: #F3F4F6; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; }
       .glow-red { box-shadow: 0 0 20px rgba(225, 29, 72, 0.25); }

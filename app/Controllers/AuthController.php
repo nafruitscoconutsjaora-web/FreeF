@@ -8,72 +8,126 @@ use Exception;
 
 class AuthController extends Controller {
     public function showLogin(Request $request): void {
-        if (!empty($_SESSION['user_id'])) {
-            $this->redirect('/');
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['user_logged_in'])) {
+            $this->redirect('/dashboard');
         }
-        $this->view('auth/login');
+        $error = $_SESSION['auth_error'] ?? null;
+        unset($_SESSION['auth_error']);
+        $this->view('auth/login', ['error' => $error]);
     }
 
     public function login(Request $request): void {
-        $email = trim((string)$request->input('email'));
-        $password = (string)$request->input('password');
+        $loginInput = trim((string)$request->input('email', $request->input('username', '')));
+        $password = (string)$request->input('password', '');
+        $isAjax = $request->input('ajax') || !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json');
 
-        if (empty($email) || empty($password)) {
-            $this->json(['success' => false, 'message' => 'Email and password are required.'], 422);
+        if (empty($loginInput) || empty($password)) {
+            if ($isAjax) {
+                $this->json(['success' => false, 'message' => 'Email and password are required.'], 422);
+            }
+            $_SESSION['auth_error'] = 'Email and password are required.';
+            $this->redirect('/login');
         }
 
-        $user = Database::fetch("SELECT * FROM users WHERE email = ?", [$email]);
+        // Support lookup by email or phone
+        $user = Database::fetch(
+            "SELECT * FROM users WHERE email = ? OR phone = ? LIMIT 1",
+            [$loginInput, $loginInput]
+        );
+
         if (!$user || !password_verify($password, $user['password'])) {
-            $this->json(['success' => false, 'message' => 'Invalid email or password.'], 401);
+            if ($isAjax) {
+                $this->json(['success' => false, 'message' => 'Invalid email or password.'], 401);
+            }
+            $_SESSION['auth_error'] = 'Invalid email or password.';
+            $this->redirect('/login');
         }
 
         if ($user['status'] !== 'active') {
-            $this->json(['success' => false, 'message' => 'Your account is suspended or banned.'], 403);
+            $msg = 'Your account has been suspended or banned. Please contact support.';
+            if ($isAjax) {
+                $this->json(['success' => false, 'message' => $msg], 403);
+            }
+            $_SESSION['auth_error'] = $msg;
+            $this->redirect('/login');
         }
 
-        // Regenerate session to prevent session fixation
+        // Regenerate session to prevent fixation
         session_regenerate_id(true);
-        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_id'] = (int)$user['id'];
+        $_SESSION['user_logged_in'] = true;
         $_SESSION['user'] = [
-            'id' => $user['id'],
+            'id' => (int)$user['id'],
             'name' => $user['name'],
             'email' => $user['email'],
+            'phone' => $user['phone'] ?? '',
             'referral_code' => $user['referral_code'],
             'ff_uid' => $user['ff_uid'],
         ];
 
         Database::query("UPDATE users SET last_login_at = NOW() WHERE id = ?", [$user['id']]);
 
-        $this->json(['success' => true, 'message' => 'Login successful', 'redirect' => '/']);
+        if ($isAjax) {
+            $this->json([
+                'success' => true,
+                'message' => 'Login successful',
+                'redirect' => '/dashboard'
+            ]);
+        }
+
+        $this->redirect('/dashboard');
     }
 
     public function showRegister(Request $request): void {
-        if (!empty($_SESSION['user_id'])) {
-            $this->redirect('/');
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['user_logged_in'])) {
+            $this->redirect('/dashboard');
         }
-        $this->view('auth/register');
+        $error = $_SESSION['auth_error'] ?? null;
+        unset($_SESSION['auth_error']);
+        $this->view('auth/register', ['error' => $error]);
     }
 
     public function register(Request $request): void {
-        $name = trim((string)$request->input('name'));
-        $email = trim((string)$request->input('email'));
-        $phone = trim((string)$request->input('phone'));
-        $password = (string)$request->input('password');
-        $ffUid = trim((string)$request->input('ff_uid'));
-        $referral = trim((string)$request->input('referral_code'));
+        $name = trim((string)$request->input('name', ''));
+        $email = trim((string)$request->input('email', ''));
+        $phone = trim((string)$request->input('phone', ''));
+        $password = (string)$request->input('password', '');
+        $ffUid = trim((string)$request->input('ff_uid', ''));
+        $referral = trim((string)$request->input('referral_code', ''));
+        $isAjax = $request->input('ajax') || !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json');
 
-        if (strlen($name) < 2 || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
-            $this->json(['success' => false, 'message' => 'Please provide valid information. Password must be at least 6 characters.'], 422);
+        if (strlen($name) < 2) {
+            $msg = 'Please enter your full name (minimum 2 characters).';
+            if ($isAjax) $this->json(['success' => false, 'message' => $msg], 422);
+            $_SESSION['auth_error'] = $msg;
+            $this->redirect('/register');
         }
 
-        $existing = Database::fetch("SELECT id FROM users WHERE email = ?", [$email]);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $msg = 'Please enter a valid email address.';
+            if ($isAjax) $this->json(['success' => false, 'message' => $msg], 422);
+            $_SESSION['auth_error'] = $msg;
+            $this->redirect('/register');
+        }
+
+        if (strlen($password) < 6) {
+            $msg = 'Password must be at least 6 characters long.';
+            if ($isAjax) $this->json(['success' => false, 'message' => $msg], 422);
+            $_SESSION['auth_error'] = $msg;
+            $this->redirect('/register');
+        }
+
+        $existing = Database::fetch("SELECT id FROM users WHERE email = ? LIMIT 1", [$email]);
         if ($existing) {
-            $this->json(['success' => false, 'message' => 'An account with this email already exists.'], 409);
+            $msg = 'An account with this email address already exists. Please sign in instead.';
+            if ($isAjax) $this->json(['success' => false, 'message' => $msg], 409);
+            $_SESSION['auth_error'] = $msg;
+            $this->redirect('/register');
         }
 
         $referredBy = null;
         if (!empty($referral)) {
-            $refUser = Database::fetch("SELECT id FROM users WHERE referral_code = ?", [$referral]);
+            $refUser = Database::fetch("SELECT id FROM users WHERE referral_code = ? LIMIT 1", [$referral]);
             if ($refUser) {
                 $referredBy = $refUser['id'];
             }
@@ -90,7 +144,7 @@ class AuthController extends Controller {
                 [$name, $email, $phone, $hashedPassword, $ffUid, $myReferralCode, $referredBy]
             );
 
-            // Initialize wallet
+            // Initialize user wallet with 0 balance
             Database::insert(
                 "INSERT INTO wallets (user_id, balance, total_credited, total_spent) VALUES (?, 0, 0, 0)",
                 [$userId]
@@ -107,26 +161,42 @@ class AuthController extends Controller {
             Database::commit();
 
             session_regenerate_id(true);
-            $_SESSION['user_id'] = $userId;
+            $_SESSION['user_id'] = (int)$userId;
+            $_SESSION['user_logged_in'] = true;
             $_SESSION['user'] = [
-                'id' => $userId,
+                'id' => (int)$userId,
                 'name' => $name,
                 'email' => $email,
+                'phone' => $phone,
                 'referral_code' => $myReferralCode,
                 'ff_uid' => $ffUid,
             ];
 
-            $this->json(['success' => true, 'message' => 'Account registered successfully', 'redirect' => '/']);
+            if ($isAjax) {
+                $this->json([
+                    'success' => true,
+                    'message' => 'Account registered successfully',
+                    'redirect' => '/dashboard'
+                ]);
+            }
+
+            $this->redirect('/dashboard');
         } catch (Exception $e) {
             Database::rollBack();
-            $this->json(['success' => false, 'message' => 'Registration error: ' . $e->getMessage()], 500);
+            $msg = 'Registration error: ' . $e->getMessage();
+            if ($isAjax) {
+                $this->json(['success' => false, 'message' => $msg], 500);
+            }
+            $_SESSION['auth_error'] = $msg;
+            $this->redirect('/register');
         }
     }
 
     public function logout(Request $request): void {
         unset($_SESSION['user_id']);
+        unset($_SESSION['user_logged_in']);
         unset($_SESSION['user']);
-        session_destroy();
+        session_regenerate_id(true);
         $this->redirect('/login');
     }
 }

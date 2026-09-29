@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Shopping Cart - FF Panel Store";
 $activeNav = 'cart';
-$isLoggedIn = !empty($_SESSION['user_id']);
+$isLoggedIn = !empty($_SESSION['user_id']) && !empty($_SESSION['user_logged_in']);
 
 if ($isLoggedIn) {
     require __DIR__ . '/../layouts/user_header.php';

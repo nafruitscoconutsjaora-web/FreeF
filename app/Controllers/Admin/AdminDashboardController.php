@@ -7,25 +7,39 @@ use App\Core\Request;
 
 class AdminDashboardController extends Controller {
     public function showLogin(Request $request): void {
-        if (!empty($_SESSION['admin_id'])) {
+        if (!empty($_SESSION['admin_id']) && !empty($_SESSION['admin_logged_in'])) {
             $this->redirect('/admin');
         }
-        $this->view('admin/login');
+        $error = $_SESSION['admin_error'] ?? null;
+        unset($_SESSION['admin_error']);
+        $this->view('admin/login', ['error' => $error]);
     }
 
     public function login(Request $request): void {
-        $email = trim((string)$request->input('email'));
-        $password = (string)$request->input('password');
+        $email = trim((string)$request->input('email', ''));
+        $password = (string)$request->input('password', '');
+        $isAjax = $request->input('ajax') || !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json');
 
-        $admin = Database::fetch("SELECT * FROM admins WHERE email = ? AND status = 'active'", [$email]);
+        if (empty($email) || empty($password)) {
+            $msg = 'Please enter both administrative email and password.';
+            if ($isAjax) $this->json(['success' => false, 'message' => $msg], 422);
+            $_SESSION['admin_error'] = $msg;
+            $this->redirect('/admin/login');
+        }
+
+        $admin = Database::fetch("SELECT * FROM admins WHERE email = ? AND status = 'active' LIMIT 1", [$email]);
         if (!$admin || !password_verify($password, $admin['password'])) {
-            $this->json(['success' => false, 'message' => 'Invalid admin credentials.'], 401);
+            $msg = 'Invalid administrative credentials.';
+            if ($isAjax) $this->json(['success' => false, 'message' => $msg], 401);
+            $_SESSION['admin_error'] = $msg;
+            $this->redirect('/admin/login');
         }
 
         session_regenerate_id(true);
-        $_SESSION['admin_id'] = $admin['id'];
+        $_SESSION['admin_id'] = (int)$admin['id'];
+        $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin'] = [
-            'id' => $admin['id'],
+            'id' => (int)$admin['id'],
             'name' => $admin['name'],
             'email' => $admin['email'],
             'role' => $admin['role'],
@@ -33,7 +47,10 @@ class AdminDashboardController extends Controller {
 
         Database::query("UPDATE admins SET last_login_at = NOW() WHERE id = ?", [$admin['id']]);
 
-        $this->json(['success' => true, 'redirect' => '/admin']);
+        if ($isAjax) {
+            $this->json(['success' => true, 'redirect' => '/admin']);
+        }
+        $this->redirect('/admin');
     }
 
     public function index(Request $request): void {
@@ -103,7 +120,9 @@ class AdminDashboardController extends Controller {
 
     public function logout(Request $request): void {
         unset($_SESSION['admin_id']);
+        unset($_SESSION['admin_logged_in']);
         unset($_SESSION['admin']);
+        session_regenerate_id(true);
         $this->redirect('/admin/login');
     }
 }

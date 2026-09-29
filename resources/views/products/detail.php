@@ -1,6 +1,11 @@
 <?php
 $pageTitle = htmlspecialchars($product['name']) . " - FF Panel Store";
-require __DIR__ . '/../layouts/header.php';
+$isLoggedIn = !empty($_SESSION['user_id']) && !empty($_SESSION['user_logged_in']);
+if ($isLoggedIn) {
+    require __DIR__ . '/../layouts/user_header.php';
+} else {
+    require __DIR__ . '/../layouts/public_header.php';
+}
 ?>
 
 <div class="max-w-5xl mx-auto px-4 py-8">
@@ -64,4 +69,10 @@ require __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<?php require __DIR__ . '/../layouts/footer.php'; ?>
+<?php 
+if ($isLoggedIn) {
+    require __DIR__ . '/../layouts/user_footer.php';
+} else {
+    require __DIR__ . '/../layouts/public_footer.php';
+}
+?>

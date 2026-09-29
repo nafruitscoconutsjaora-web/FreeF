@@ -1,6 +1,6 @@
 <?php
 $pageTitle = "My Orders - FF Panel Store";
-require __DIR__ . '/../layouts/header.php';
+require __DIR__ . '/../layouts/user_header.php';
 ?>
 
 <div class="max-w-5xl mx-auto px-4 py-8 space-y-6">
@@ -51,4 +51,4 @@ require __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<?php require __DIR__ . '/../layouts/footer.php'; ?>
+<?php require __DIR__ . '/../layouts/user_footer.php'; ?>

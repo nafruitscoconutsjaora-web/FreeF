@@ -6,7 +6,7 @@
  */
 $pageTitle = "FF Panel Store - Fast, Safe & Reliable Free Fire Services";
 $activeNav = 'home';
-$isLoggedIn = !empty($_SESSION['user_id']);
+$isLoggedIn = !empty($_SESSION['user_id']) && !empty($_SESSION['user_logged_in']);
 
 require __DIR__ . '/layouts/public_header.php';
 ?>

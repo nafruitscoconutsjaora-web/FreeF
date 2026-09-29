@@ -3,7 +3,7 @@ namespace App\Core;
 
 class AdminMiddleware implements MiddlewareInterface {
     public function handle(Request $request): void {
-        if (empty($_SESSION['admin_id'])) {
+        if (empty($_SESSION['admin_id']) || empty($_SESSION['admin_logged_in'])) {
             if ($request->method() === 'POST' || str_starts_with($request->uri(), '/api/')) {
                 Response::json(['success' => false, 'message' => 'Admin authorization required.'], 403);
             }
