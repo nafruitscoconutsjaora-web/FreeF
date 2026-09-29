@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --color-ff-dark: #080B11;
+  --color-ff-card: #0B0E14;
+  --color-ff-surface: #111723;
+  --color-ff-accent: #E11D48;
+  --color-ff-accent-hover: #BE123C;
+  --color-ff-pink: #F43F5E;
+}
+
 @layer base {
   :root {
     --bg-dark: #080B11;

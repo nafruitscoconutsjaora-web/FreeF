@@ -1,3 +1,5 @@
+import './index.css';
+
 /**
  * FF Panel Store - Frontend Core (Vanilla JavaScript)
  * Strictly Public Storefront with Separate User Panel & Admin Panel
