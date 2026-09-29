@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FF Panel Store - Fast • Safe • Reliable Free Fire Services</title>
+    <meta name="description" content="Premium Free Fire Digital Gaming Store & Services Platform for Diamonds, Memberships, Elite Pass, UID Top-ups with Wallet and Razorpay integration." />
+    <meta property="og:title" content="FF Panel Store - Fast • Safe • Reliable Free Fire Services" />
+    <meta property="og:description" content="Premium Free Fire Digital Gaming Store & Services Platform for Diamonds, Memberships, Elite Pass, UID Top-ups with Wallet and Razorpay integration." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-[#080B11] text-gray-100 min-h-screen flex flex-col antialiased selection:bg-rose-500 selection:text-white">
+
+    <!-- 1. PUBLIC STOREFRONT HEADER (NO WALLET, NO NOTIFICATIONS, NO PROFILE AVATAR) -->
+    <header class="bg-[#0B0E14] border-b border-gray-800/80 px-4 lg:px-8 py-3.5 relative">
+      <div class="max-w-[1580px] mx-auto flex items-center justify-between gap-4">
+        
+        <!-- Logo -->
+        <a href="#" id="brandLogo" class="flex items-center gap-3 shrink-0 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-rose-500 to-rose-400 flex items-center justify-center font-black text-white text-xl tracking-tighter shadow-lg shadow-rose-600/30 group-hover:scale-105 transition transform">
+            FF
+          </div>
+          <div>
+            <span class="text-lg font-black text-white tracking-wide block leading-tight">FF Panel Store</span>
+            <span class="text-[11px] text-gray-400 block font-medium">Fast • Safe • Reliable</span>
+          </div>
+        </a>
+
+        <!-- Search Bar -->
+        <div class="hidden md:flex flex-1 max-w-sm relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+          <input type="text" id="searchInput" placeholder="Search for services (Diamond, UID, Pass...)" 
+                 class="w-full bg-[#111723] border border-gray-800 rounded-full pl-9 pr-4 py-2 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-500 transition-colors">
+        </div>
+
+        <!-- Public Center Nav Links -->
+        <nav class="hidden xl:flex items-center gap-1.5">
+          <button class="nav-tab active px-4 py-1.5 rounded-full text-xs font-semibold bg-[#E11D48] text-white flex items-center gap-1.5 shadow-sm transition" data-view="home">
+            <i class="fa-solid fa-house text-[11px]"></i> Home
+          </button>
+          <button class="nav-tab px-4 py-1.5 rounded-full text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-1.5" data-view="services">
+            <i class="fa-solid fa-layer-group text-[11px]"></i> Services
+          </button>
+          <a href="#categories" class="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-fire text-rose-500 text-[11px]"></i> Categories
+          </a>
+          <button class="nav-tab px-4 py-1.5 rounded-full text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-1.5" data-view="about">
+            <i class="fa-solid fa-circle-info text-[11px]"></i> About
+          </button>
+          <button class="nav-tab px-4 py-1.5 rounded-full text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/60 transition flex items-center gap-1.5" data-view="contact">
+            <i class="fa-solid fa-envelope text-[11px]"></i> Contact
+          </button>
+        </nav>
+
+        <!-- Right Side Actions: Clean Public Controls -->
+        <div class="flex items-center gap-2.5">
+          <!-- Cart Button -->
+          <button id="cartBtn" class="w-9 h-9 rounded-full bg-[#111723] border border-gray-800 flex items-center justify-center text-gray-300 hover:text-white hover:border-gray-700 relative transition">
+            <i class="fa-solid fa-cart-shopping text-xs"></i>
+            <span id="cartCountBadge" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-rose-600 rounded-full text-[9px] font-bold text-white flex items-center justify-center shadow">0</span>
+          </button>
+
+          <!-- Logged Out Buttons -->
+          <div id="authGuestButtons" class="flex items-center gap-2">
+            <button id="navLoginBtn" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-200 hover:text-white bg-[#111723] border border-gray-800 hover:border-gray-700 transition">
+              Sign In
+            </button>
+            <button id="navRegisterBtn" class="px-4 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 transition shadow-md shadow-rose-600/30 flex items-center gap-1">
+              Get Started <i class="fa-solid fa-arrow-right text-[10px] ml-0.5"></i>
+            </button>
+          </div>
+
+          <!-- Logged In Dashboard Button (No wallet balance or notifications injected on landing page) -->
+          <div id="authUserButtons" class="hidden flex items-center gap-2">
+            <button id="userDashboardBtn" class="px-4 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 transition shadow-md shadow-rose-600/30 flex items-center gap-1.5">
+              <i class="fa-solid fa-chart-pie text-xs"></i> My Dashboard
+            </button>
+          </div>
+
+          <!-- Admin Portal Switcher -->
+          <button id="adminToggleBtn" class="px-2.5 py-1.5 rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 text-gray-400 hover:text-white text-xs font-semibold transition" title="Administrative Console">
+            <i class="fa-solid fa-shield-halved text-rose-500"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. MAIN APPLICATION CONTENT -->
+    <div id="mainApp" class="max-w-[1580px] mx-auto px-4 lg:px-8 py-6 w-full flex-1">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- LEFT SIDEBAR: PURE PUBLIC STORE NAVIGATION -->
+        <aside class="hidden xl:block lg:col-span-2 space-y-6">
+          <div class="bg-[#0B0E14] border border-gray-800/80 rounded-2xl p-2.5 space-y-1">
+            <button class="nav-item active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#E11D48] text-white font-medium text-xs transition" data-view="home">
+              <i class="fa-solid fa-house w-4 text-center"></i> Home
+            </button>
+            <button class="nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 text-xs transition" data-view="services">
+              <div class="flex items-center gap-3">
+                <i class="fa-solid fa-gamepad w-4 text-center"></i> Services
+              </div>
+              <span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded-full border border-rose-500/30">Top</span>
+            </button>
+            <button class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 text-xs transition" data-filter="diamonds">
+              <i class="fa-solid fa-gem w-4 text-center text-blue-400"></i> Diamonds
+            </button>
+            <button class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 text-xs transition" data-filter="membership">
+              <i class="fa-solid fa-crown w-4 text-center text-amber-400"></i> Membership
+            </button>
+            <button class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 text-xs transition" data-filter="elite-pass">
+              <i class="fa-solid fa-ticket w-4 text-center text-yellow-500"></i> Elite Pass
+            </button>
+            <button class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 text-xs transition" data-view="about">
+              <i class="fa-solid fa-circle-info w-4 text-center"></i> About Us
+            </button>
+            <button class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 text-xs transition" data-view="contact">
+              <i class="fa-solid fa-headset w-4 text-center"></i> 24/7 Support
+            </button>
+            <button class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/40 text-xs transition" data-view="terms">
+              <i class="fa-solid fa-shield-halved w-4 text-center"></i> Guarantees
+            </button>
+
+            <!-- Sidebar Sign In & Register Buttons -->
+            <div id="sidebarAuthButtons" class="pt-3 border-t border-gray-800/80 mt-2 space-y-1.5">
+              <button id="sidebarLoginBtn" class="w-full py-2 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 text-xs font-semibold transition border border-gray-800 flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-arrow-right-to-bracket text-[10px]"></i> Sign In
+              </button>
+              <button id="sidebarRegisterBtn" class="w-full py-2 rounded-xl text-white bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 text-xs font-bold shadow-md shadow-rose-600/30 transition flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-user-plus text-[10px]"></i> Create Account
+              </button>
+            </div>
+          </div>
+
+          <!-- Left Promo Card -->
+          <div class="rounded-2xl p-4 bg-gradient-to-b from-[#2B101E] to-[#120B15] border border-rose-900/40 relative overflow-hidden">
+            <div class="w-10 h-10 rounded-full bg-rose-500/20 flex items-center justify-center text-rose-500 mb-3 shadow-inner">
+              <i class="fa-solid fa-bolt text-base"></i>
+            </div>
+            <h4 class="font-extrabold text-white text-xs leading-snug">Instant Top-Up Service</h4>
+            <p class="text-[11px] text-gray-400 mt-1 mb-3">Recharge directly using your Player UID. No login required!</p>
+            <button class="nav-tab w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 text-white font-bold text-xs hover:from-rose-500 hover:to-rose-400 transition shadow" data-view="services">
+              View Catalog <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+
+          <div class="px-2">
+            <p class="text-[11px] text-gray-500">© 2026 FF Panel Store.</p>
+            <p class="text-[10px] text-gray-600 mt-0.5">Fast • Safe • Reliable</p>
+          </div>
+        </aside>
+
+        <!-- CENTER MAIN CONTENT: STOREFRONT -->
+        <main class="lg:col-span-12 xl:col-span-7 space-y-7">
+          
+          <!-- Hero Banner -->
+          <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#170B16] via-[#1E0D1E] to-[#110714] border border-rose-900/30 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between min-h-[260px] shadow-xl">
+            <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-rose-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="space-y-3 z-10 max-w-md">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                <i class="fa-solid fa-fire text-rose-400"></i> Best Place For Free Fire Services
+              </span>
+              <h1 class="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight tracking-tight">
+                Get Your <span class="text-rose-500">Free Fire</span> Services <span class="text-rose-500">Instantly</span>
+              </h1>
+              <p class="text-gray-300 text-xs md:text-sm">
+                Diamonds, Memberships, Elite Pass, UID, and more — all at the best prices with automated delivery.
+              </p>
+              <div class="pt-2 flex items-center gap-3">
+                <button class="nav-tab inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-bold text-xs shadow-lg shadow-rose-600/30 transition transform hover:-translate-y-0.5" data-view="services">
+                  Explore Services <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+                <button class="filter-btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#111723] hover:bg-gray-800 text-gray-300 hover:text-white font-semibold text-xs border border-gray-800 transition" data-filter="diamonds">
+                  <i class="fa-solid fa-gem text-blue-400 text-xs"></i> Top Up Diamonds
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Hero Graphic -->
+            <div class="mt-6 md:mt-0 relative flex flex-col items-center text-center select-none">
+              <div class="w-44 h-44 rounded-full bg-gradient-to-tr from-rose-600/30 via-red-500/15 to-transparent blur-2xl absolute -top-4"></div>
+              <div class="relative z-10 py-2">
+                <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-tr from-rose-700 via-rose-600 to-red-500 flex items-center justify-center text-white shadow-2xl shadow-rose-600/50 mb-3 border border-rose-400/30">
+                  <i class="fa-solid fa-user-ninja text-3xl"></i>
+                </div>
+                <span class="text-xl md:text-2xl font-black italic tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-200 to-rose-400 block drop-shadow">
+                  FREE FIRE
+                </span>
+                <span class="text-xs font-black tracking-widest text-rose-400 uppercase block mt-0.5">
+                  TOP UP & GAME SERVICES
+                </span>
+                <div class="mt-3 flex items-center justify-center gap-2 text-[10px] text-gray-300 bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 shadow">
+                  <span class="text-rose-400 font-semibold">Fast Delivery</span> • <span>Safe</span> • <span>24/7 Support</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shop by Category -->
+          <section id="categories" class="space-y-3.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-fire text-rose-500"></i>
+                <h2 class="text-sm font-bold text-white">Shop by Category</h2>
+              </div>
+              <button class="nav-tab text-xs font-semibold text-rose-500 hover:text-rose-400 flex items-center gap-1 transition" data-view="services">
+                View All <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </button>
+            </div>
+
+            <!-- 9 Category Cards Grid matching reference -->
+            <div id="categoryGrid" class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-2.5">
+              <!-- Dynamically populated -->
+            </div>
+          </section>
+
+          <!-- Popular Services Section -->
+          <section class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-star text-rose-500 text-sm"></i>
+                  <h2 class="text-sm font-bold text-white">Popular Services</h2>
+                </div>
+                <p class="text-xs text-gray-400">Most purchased services by our customers</p>
+              </div>
+
+              <!-- Filter tabs -->
+              <div id="serviceFilterTabs" class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                <button class="filter-btn active px-3.5 py-1 rounded-full font-semibold bg-[#E11D48] text-white transition" data-filter="all">All</button>
+                <button class="filter-btn px-3 py-1 rounded-full font-medium text-gray-400 hover:text-white bg-[#111723] border border-gray-800 transition" data-filter="diamonds">Diamonds</button>
+                <button class="filter-btn px-3 py-1 rounded-full font-medium text-gray-400 hover:text-white bg-[#111723] border border-gray-800 transition" data-filter="membership">Membership</button>
+                <button class="filter-btn px-3 py-1 rounded-full font-medium text-gray-400 hover:text-white bg-[#111723] border border-gray-800 transition" data-filter="elite-pass">Elite Pass</button>
+              </div>
+            </div>
+
+            <!-- Products Grid (4 columns on desktop matching reference) -->
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              <!-- Dynamically populated from store state -->
+            </div>
+          </section>
+
+          <!-- Store Information & Why Choose Us -->
+          <section class="bg-[#0B0E14] border border-gray-800/80 rounded-3xl p-6 space-y-4 shadow-lg">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-rose-500 text-sm"></i>
+              <h3 class="text-sm font-bold text-white">Why Choose FF Panel Store?</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+              <div class="p-4 bg-[#111723] rounded-2xl border border-gray-800/80 space-y-1.5">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm font-bold">
+                  <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h4 class="text-xs font-bold text-white">Instant UID Delivery</h4>
+                <p class="text-[11px] text-gray-400 leading-relaxed">Direct automated top-up delivered to your Free Fire Player ID in under 60 seconds.</p>
+              </div>
+
+              <div class="p-4 bg-[#111723] rounded-2xl border border-gray-800/80 space-y-1.5">
+                <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm font-bold">
+                  <i class="fa-solid fa-lock"></i>
+                </div>
+                <h4 class="text-xs font-bold text-white">100% Account Safe</h4>
+                <p class="text-[11px] text-gray-400 leading-relaxed">No password or game login credentials needed. Never risk account bans or security flags.</p>
+              </div>
+
+              <div class="p-4 bg-[#111723] rounded-2xl border border-gray-800/80 space-y-1.5">
+                <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-500 flex items-center justify-center text-sm font-bold">
+                  <i class="fa-solid fa-headset"></i>
+                </div>
+                <h4 class="text-xs font-bold text-white">24/7 Dedicated Support</h4>
+                <p class="text-[11px] text-gray-400 leading-relaxed">Our customer support is always active to assist you with order tracking and inquiries.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Final Call To Action -->
+          <section class="bg-gradient-to-r from-rose-950/60 via-purple-950/40 to-[#0B0E14] border border-rose-900/40 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+            <div class="space-y-1.5 text-center sm:text-left">
+              <h3 class="text-lg sm:text-xl font-black text-white">Ready to Level Up Your Free Fire Account?</h3>
+              <p class="text-xs text-gray-300">Recharge diamonds now and unlock the latest characters, gun skins, and elite passes.</p>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+              <button class="nav-tab px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 text-white font-bold text-xs shadow-lg transition" data-view="services">
+                Shop All Services
+              </button>
+            </div>
+          </section>
+        </main>
+
+        <!-- RIGHT SIDEBAR: PUBLIC STOREFRONT WIDGETS -->
+        <aside class="lg:col-span-12 xl:col-span-3 space-y-6">
+          
+          <!-- Widget 1: Quick Recharge -->
+          <div class="bg-[#0B0E14] border border-gray-800/80 rounded-2xl p-5 space-y-4 shadow-lg">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-500 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-bolt text-sm"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-white text-sm">Quick Recharge</h3>
+                <p class="text-[11px] text-gray-400">Top up your Free Fire account instantly</p>
+              </div>
+            </div>
+
+            <form id="quickRechargeForm" class="space-y-3.5">
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Enter Player UID</label>
+                <input type="text" id="qrUid" required placeholder="Enter Free Fire UID (e.g. 5482910482)"
+                       class="w-full bg-[#111723] border border-gray-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-rose-500 transition font-mono">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Select Diamonds Amount</label>
+                <select id="qrSelectAmount" class="w-full bg-[#111723] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500 transition">
+                  <option value="1">100 Diamonds - ₹ 20.00</option>
+                  <option value="2" selected>520 Diamonds - ₹ 95.00</option>
+                  <option value="3">1060 Diamonds - ₹ 180.00</option>
+                  <option value="4">2180 Diamonds - ₹ 340.00</option>
+                </select>
+              </div>
+
+              <div id="qrAlert" class="hidden text-xs rounded-xl p-2.5"></div>
+
+              <button type="submit" id="qrSubmitBtn" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-lg shadow-rose-600/30">
+                Recharge Now <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </button>
+            </form>
+          </div>
+
+          <!-- Widget 2: Store Guarantees (Public Trust Badges) -->
+          <div class="bg-[#0B0E14] border border-gray-800/80 rounded-2xl p-5 space-y-3.5 shadow-lg">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-certificate text-rose-500 text-sm"></i>
+              <h3 class="font-bold text-white text-sm">Store Guarantees</h3>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+              <div class="flex items-center gap-2.5 text-gray-300">
+                <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                <span>100% Garena Direct UID Top-Up</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-gray-300">
+                <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                <span>Instant UPI & QR Code Payments</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-gray-300">
+                <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                <span>No Password Or Login Needed</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-gray-300">
+                <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                <span>Official Automated API Delivery</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget 3: Promotional Coupons Card -->
+          <div class="rounded-2xl p-5 bg-gradient-to-br from-[#2D101E] to-[#120B15] border border-rose-900/40 relative overflow-hidden shadow-lg">
+            <div class="flex items-start justify-between">
+              <div>
+                <h4 class="font-extrabold text-white text-sm">Save More With <span class="text-rose-400">Coupons!</span></h4>
+                <p class="text-xs text-gray-300 mt-1">Use latest offers and get amazing discounts on every order.</p>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-lg shrink-0 shadow-inner">
+                <i class="fa-solid fa-gift"></i>
+              </div>
+            </div>
+            <div class="pt-4">
+              <button class="nav-tab inline-flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-bold text-xs transition shadow" data-view="services">
+                Explore Offers <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </button>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+
+    <!-- 3. PUBLIC STOREFOOTER -->
+    <footer class="mt-auto border-t border-gray-800/80 bg-[#0B0E14] py-8 text-xs text-gray-500">
+      <div class="max-w-[1580px] mx-auto px-4 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-rose-600 to-rose-400 flex items-center justify-center font-black text-white text-sm">
+            FF
+          </div>
+          <div>
+            <span class="text-sm font-bold text-white block">FF Panel Store</span>
+            <span class="text-[10px] text-gray-400">Fast • Safe • Reliable Free Fire Services</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-6 text-gray-400 text-xs">
+          <button class="nav-tab hover:text-rose-400 transition" data-view="services">All Services</button>
+          <button class="nav-tab hover:text-rose-400 transition" data-view="about">About Us</button>
+          <button class="nav-tab hover:text-rose-400 transition" data-view="contact">24/7 Support</button>
+          <button class="nav-tab hover:text-rose-400 transition" data-view="terms">Terms & Conditions</button>
+        </div>
+
+        <div class="text-[11px] text-gray-500">
+          © 2026 FF Panel Store. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============================================== -->
+    <!-- DEDICATED AUTHENTICATED USER PANEL MODAL -->
+    <!-- ============================================== -->
+    <div id="userPanelModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+      <div class="bg-[#0D111A] border border-gray-800 rounded-3xl max-w-2xl w-full p-6 space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center text-white font-bold">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-white text-base" id="panelUserName">Player Account</h3>
+              <p class="text-xs text-gray-400" id="panelUserEmail">player@example.com</p>
+            </div>
+          </div>
+          <button id="closeUserPanelBtn" class="w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <!-- User Wallet & Statistics Cards (Inside User Panel Only) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="bg-[#121824] border border-gray-800 rounded-2xl p-4 space-y-1">
+            <span class="text-[10px] uppercase font-bold text-gray-400 block">Wallet Balance</span>
+            <div class="text-xl font-black text-emerald-400 font-mono" id="panelWalletBal">₹ 1,250.00</div>
+            <button id="panelAddFundsBtn" class="text-[11px] text-rose-400 hover:underline pt-1 block">+ Add Balance</button>
+          </div>
+          <div class="bg-[#121824] border border-gray-800 rounded-2xl p-4 space-y-1">
+            <span class="text-[10px] uppercase font-bold text-gray-400 block">Total Orders</span>
+            <div class="text-xl font-black text-white font-mono" id="panelOrdersCount">2 Orders</div>
+            <span class="text-[10px] text-emerald-400">All Completed</span>
+          </div>
+          <div class="bg-[#121824] border border-gray-800 rounded-2xl p-4 space-y-1">
+            <span class="text-[10px] uppercase font-bold text-gray-400 block">Free Fire Player UID</span>
+            <div class="text-xs font-bold text-white font-mono truncate" id="panelUserUid">5482910482</div>
+            <span class="text-[10px] text-gray-500">Auto-saved UID</span>
+          </div>
+        </div>
+
+        <!-- User Orders History Table (Inside User Panel Only) -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-white text-xs uppercase tracking-wider">Your Personal Orders</h4>
+          <div class="overflow-x-auto rounded-xl border border-gray-800">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-900/80 text-gray-400 uppercase text-[10px]">
+                <tr>
+                  <th class="p-3">Order ID</th>
+                  <th class="p-3">Service</th>
+                  <th class="p-3">Player UID</th>
+                  <th class="p-3">Amount</th>
+                  <th class="p-3">Status</th>
+                </tr>
+              </thead>
+              <tbody id="panelOrdersTable" class="divide-y divide-gray-800/80">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- User Logout Action -->
+        <div class="flex justify-between items-center pt-3 border-t border-gray-800 text-xs">
+          <span class="text-gray-500">Need support? Contact our 24/7 team</span>
+          <button id="userLogoutBtn" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-rose-600/20 text-rose-400 font-bold transition flex items-center gap-1.5">
+            <i class="fa-solid fa-power-off text-xs"></i> Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- AUTHENTICATION MODALS (LOGIN & REGISTER) -->
+    <!-- ============================================== -->
+    <div id="loginModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+      <div class="bg-[#0D111A] border border-gray-800 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+          <h3 class="font-bold text-white text-base">Sign In to FF Panel Store</h3>
+          <button id="closeLoginBtn" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <form id="loginForm" class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Email Address</label>
+            <input type="email" id="loginEmail" required placeholder="player@example.com" value="player@ffpanelstore.com"
+                   class="w-full bg-[#121824] border border-gray-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-rose-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Password</label>
+            <input type="password" id="loginPassword" required placeholder="••••••••" value="password123"
+                   class="w-full bg-[#121824] border border-gray-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-rose-500">
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow mt-2">
+            Sign In
+          </button>
+        </form>
+        <p class="text-[11px] text-gray-400 text-center">
+          Don't have an account? <button type="button" id="switchToRegisterBtn" class="text-rose-400 font-bold hover:underline">Register</button>
+        </p>
+      </div>
+    </div>
+
+    <div id="registerModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+      <div class="bg-[#0D111A] border border-gray-800 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+          <h3 class="font-bold text-white text-base">Create Player Account</h3>
+          <button id="closeRegisterBtn" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <form id="registerForm" class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Full Name</label>
+            <input type="text" id="regName" required placeholder="Free Fire Gamer"
+                   class="w-full bg-[#121824] border border-gray-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-rose-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Email Address</label>
+            <input type="email" id="regEmail" required placeholder="gamer@example.com"
+                   class="w-full bg-[#121824] border border-gray-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-rose-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Player UID (Optional)</label>
+            <input type="text" id="regUid" placeholder="e.g. 5482910482"
+                   class="w-full bg-[#121824] border border-gray-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-rose-500 font-mono">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Password</label>
+            <input type="password" id="regPassword" required placeholder="••••••••"
+                   class="w-full bg-[#121824] border border-gray-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-rose-500">
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow mt-2">
+            Create Account
+          </button>
+        </form>
+        <p class="text-[11px] text-gray-400 text-center">
+          Already have an account? <button type="button" id="switchToLoginBtn" class="text-rose-400 font-bold hover:underline">Sign In</button>
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- CART & CHECKOUT MODAL -->
+    <!-- ============================================== -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+      <div class="bg-[#0B0E14] border border-gray-800 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-cart-shopping text-rose-500"></i>
+            <h3 class="font-bold text-white text-base">Your Cart & Checkout</h3>
+          </div>
+          <button id="closeCartBtn" class="w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <div id="cartItemsList" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+          <!-- Cart items rendered here -->
+        </div>
+
+        <div class="space-y-3 border-t border-gray-800 pt-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Player UID for Recharge *</label>
+            <input type="text" id="checkoutUid" placeholder="Enter Free Fire UID (e.g. 5482910482)" value="5482910482"
+                   class="w-full bg-[#111723] border border-gray-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-rose-500 font-mono">
+          </div>
+
+          <!-- Coupon Input -->
+          <div class="flex gap-2">
+            <input type="text" id="couponCodeInput" placeholder="Coupon Code (e.g. FFSAVE10)" 
+                   class="flex-1 bg-[#111723] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white uppercase focus:outline-none focus:border-rose-500 font-mono">
+            <button id="applyCouponBtn" class="px-3.5 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-white transition">
+              Apply
+            </button>
+          </div>
+          <div id="couponStatus" class="hidden text-xs text-emerald-400"></div>
+
+          <!-- Calculation Summary -->
+          <div class="bg-[#111723] rounded-2xl p-3.5 space-y-1.5 text-xs">
+            <div class="flex justify-between text-gray-400">
+              <span>Subtotal</span>
+              <span id="checkoutSubtotal">₹ 0.00</span>
+            </div>
+            <div class="flex justify-between text-emerald-400">
+              <span>Discount</span>
+              <span id="checkoutDiscount">- ₹ 0.00</span>
+            </div>
+            <div class="flex justify-between text-white font-extrabold text-sm border-t border-gray-800 pt-1.5">
+              <span>Final Total</span>
+              <span id="checkoutTotal">₹ 0.00</span>
+            </div>
+          </div>
+
+          <!-- Payment Method Choice -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Payment Method</label>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="cursor-pointer border border-rose-500/50 bg-[#161224] rounded-xl p-2.5 flex items-center gap-2">
+                <input type="radio" name="payment_method" value="razorpay" checked class="text-rose-600 focus:ring-0">
+                <span class="text-xs font-bold text-white">Instant UPI / QR</span>
+              </label>
+              <label class="cursor-pointer border border-gray-800 bg-[#111723] hover:border-gray-700 rounded-xl p-2.5 flex items-center gap-2">
+                <input type="radio" name="payment_method" value="wallet" class="text-rose-600 focus:ring-0">
+                <span class="text-xs font-bold text-gray-300">Wallet Balance</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="checkoutAlert" class="hidden text-xs rounded-xl p-2.5"></div>
+
+          <button id="placeOrderBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-black text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-rose-600/30">
+            Confirm & Pay Now <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- ADMIN CONTROL PANEL MODAL -->
+    <!-- ============================================== -->
+    <div id="adminModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+      <div class="bg-[#0D111A] border border-gray-800 rounded-3xl max-w-4xl w-full p-6 space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center text-white font-bold">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-white text-base">Admin Management Console</h3>
+              <p class="text-xs text-gray-400">Manage orders, top-up API providers, and products</p>
+            </div>
+          </div>
+          <button id="closeAdminBtn" class="w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="bg-[#121824] p-3.5 rounded-2xl border border-gray-800">
+            <span class="text-gray-400 text-[10px] uppercase font-bold block">Gross Revenue</span>
+            <div class="text-lg font-black text-emerald-400 font-mono">₹ 14,850.00</div>
+          </div>
+          <div class="bg-[#121824] p-3.5 rounded-2xl border border-gray-800">
+            <span class="text-gray-400 text-[10px] uppercase font-bold block">Total Orders</span>
+            <div class="text-lg font-black text-white font-mono">82 Orders</div>
+          </div>
+          <div class="bg-[#121824] p-3.5 rounded-2xl border border-gray-800">
+            <span class="text-gray-400 text-[10px] uppercase font-bold block">Active Users</span>
+            <div class="text-lg font-black text-cyan-400 font-mono">48 Users</div>
+          </div>
+          <div class="bg-[#121824] p-3.5 rounded-2xl border border-gray-800">
+            <span class="text-gray-400 text-[10px] uppercase font-bold block">Provider Balance</span>
+            <div class="text-lg font-black text-yellow-400 font-mono">$ 142.50 USD</div>
+          </div>
+        </div>
+
+        <!-- Orders Table in Admin -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-white text-xs uppercase tracking-wider">All Customer Orders</h4>
+          <div class="overflow-x-auto rounded-xl border border-gray-800">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-900/80 text-gray-400 uppercase text-[10px]">
+                <tr>
+                  <th class="p-3">Order ID</th>
+                  <th class="p-3">Product</th>
+                  <th class="p-3">UID</th>
+                  <th class="p-3">Amount</th>
+                  <th class="p-3">Mode</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminOrdersTable" class="divide-y divide-gray-800/80">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-[#111723] border border-gray-700 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs transform transition-all translate-y-20 opacity-0 pointer-events-none">
+      <i id="toastIcon" class="fa-solid fa-circle-check text-rose-500 text-sm"></i>
+      <span id="toastMsg">Notification message</span>
+    </div>
+
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>

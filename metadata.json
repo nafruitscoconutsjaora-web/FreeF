@@ -1,0 +1,6 @@
+{
+  "name": "FF Panel Store",
+  "description": "Premium Free Fire Digital Gaming Store & Services Platform for Diamonds, Memberships, Elite Pass, UID Top-ups with Wallet and Razorpay integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
