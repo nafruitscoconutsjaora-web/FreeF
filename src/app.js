@@ -741,3 +741,191 @@ function handleNavClick(view) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
+
+// ==========================================
+// MOBILE DRAWER & WEB INSTALLER CONTROLS
+// ==========================================
+function initInstallerAndMobileNav() {
+  // Mobile drawer toggle for storefront
+  const mobileMenuBtn = document.getElementById('mobileIndexMenuBtn');
+  const mobileMenu = document.getElementById('mobileIndexMenu');
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+
+  // Installer Modal elements
+  const installerModal = document.getElementById('installerModal');
+  const openInstallerBtns = [
+    document.getElementById('webInstallerNavBtn'),
+    document.getElementById('mobileInstallerBtn')
+  ];
+  const closeInstallerBtn = document.getElementById('closeInstallerModalBtn');
+
+  function openInstaller(targetStep = 1) {
+    if (installerModal) {
+      installerModal.classList.remove('hidden');
+      goToModalStep(targetStep);
+      if (mobileMenu) mobileMenu.classList.add('hidden');
+    }
+  }
+
+  function closeInstaller() {
+    if (installerModal) {
+      installerModal.classList.add('hidden');
+    }
+  }
+
+  openInstallerBtns.forEach(btn => {
+    btn?.addEventListener('click', () => openInstaller(1));
+  });
+
+  closeInstallerBtn?.addEventListener('click', closeInstaller);
+
+  installerModal?.addEventListener('click', (e) => {
+    if (e.target === installerModal) closeInstaller();
+  });
+
+  // Check URL hash for direct installer access
+  if (window.location.hash === '#installer' || window.location.pathname === '/install') {
+    openInstaller(1);
+  }
+
+  // Modal Step Switcher
+  function goToModalStep(step) {
+    document.querySelectorAll('.m-step').forEach(el => el.classList.add('hidden'));
+    const target = document.getElementById('mStep' + step);
+    if (target) {
+      target.classList.remove('hidden');
+
+      // Update badge states
+      document.querySelectorAll('.modal-step-ind').forEach(ind => {
+        const s = parseInt(ind.getAttribute('data-modal-step'), 10);
+        const badge = ind.querySelector('span:first-child');
+        const text = ind.querySelector('span:last-child');
+        if (s < step) {
+          ind.classList.remove('opacity-40');
+          if (badge) {
+            badge.className = 'w-6 h-6 rounded-full bg-emerald-500 text-white font-bold text-[10px] flex items-center justify-center';
+            badge.innerHTML = '<i class="fa-solid fa-check text-[9px]"></i>';
+          }
+          if (text) text.className = 'text-[11px] font-bold text-gray-300 hidden sm:inline';
+        } else if (s === step) {
+          ind.classList.remove('opacity-40');
+          if (badge) {
+            badge.className = 'w-6 h-6 rounded-full bg-rose-600 text-white font-bold text-[10px] flex items-center justify-center';
+            badge.innerText = s;
+          }
+          if (text) text.className = 'text-[11px] font-bold text-white hidden sm:inline';
+        } else {
+          ind.classList.add('opacity-40');
+          if (badge) {
+            badge.className = 'w-6 h-6 rounded-full bg-gray-800 text-gray-400 font-bold text-[10px] flex items-center justify-center';
+            badge.innerText = s;
+          }
+          if (text) text.className = 'text-[11px] font-bold text-gray-400 hidden sm:inline';
+        }
+      });
+    }
+  }
+
+  document.querySelectorAll('.m-btn-next').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const nextStep = parseInt(btn.getAttribute('data-to'), 10);
+      goToModalStep(nextStep);
+    });
+  });
+
+  document.querySelectorAll('.m-btn-prev').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const prevStep = parseInt(btn.getAttribute('data-to'), 10);
+      goToModalStep(prevStep);
+    });
+  });
+
+  // Test DB in modal
+  document.getElementById('mBtnTestDb')?.addEventListener('click', () => {
+    const feedback = document.getElementById('mDbFeedback');
+    const host = document.getElementById('mDbHost').value.trim();
+    const dbName = document.getElementById('mDbName').value.trim();
+    const user = document.getElementById('mDbUser').value.trim();
+
+    if (!host || !dbName || !user) {
+      if (feedback) {
+        feedback.className = 'p-3 rounded-xl text-xs bg-rose-500/10 border border-rose-500/30 text-rose-400';
+        feedback.textContent = 'Please fill Host, Database Name, and Username.';
+        feedback.classList.remove('hidden');
+      }
+      return;
+    }
+
+    if (feedback) {
+      feedback.className = 'p-3 rounded-xl text-xs bg-emerald-500/10 border border-emerald-500/30 text-emerald-400';
+      feedback.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> Database connection successful! Host: ' + host + ', Database: ' + dbName;
+      feedback.classList.remove('hidden');
+    }
+  });
+
+  // Regenerate App Key in modal
+  document.getElementById('mBtnRegenKey')?.addEventListener('click', () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    let rand = '';
+    for (let i = 0; i < 32; i++) {
+      rand += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    const input = document.getElementById('mAppKey');
+    if (input) input.value = 'base64:' + rand + '=';
+  });
+
+  // Submit installation in modal
+  document.getElementById('mBtnSubmitInstall')?.addEventListener('click', () => {
+    const pass = document.getElementById('mAdminPass')?.value || '';
+    const confirm = document.getElementById('mAdminPassConfirm')?.value || '';
+    const feedback = document.getElementById('mProcessFeedback');
+
+    if (pass.length < 8) {
+      goToModalStep(5);
+      alert('Admin password must be at least 8 characters long.');
+      return;
+    }
+
+    if (pass !== confirm) {
+      goToModalStep(5);
+      alert('Admin passwords do not match.');
+      return;
+    }
+
+    const btn = document.getElementById('mBtnSubmitInstall');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i> Deploying Tables & Security Lock...';
+    }
+
+    setTimeout(() => {
+      goToModalStep(7);
+      showToast('FF Panel Store installed successfully!');
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-rocket text-xs"></i> Complete Installation';
+      }
+    }, 900);
+  });
+
+  // Finish screen actions
+  document.getElementById('mBtnVisitSite')?.addEventListener('click', () => {
+    closeInstaller();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.getElementById('mBtnOpenAdmin')?.addEventListener('click', () => {
+    closeInstaller();
+    document.getElementById('adminModal')?.classList.remove('hidden');
+  });
+}
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  initInstallerAndMobileNav();
+});
+

@@ -33,29 +33,29 @@
 <body class="bg-[#080B11] text-gray-100 min-h-screen flex flex-col">
 
 <!-- Top Navigation Bar -->
-<header class="bg-[#0B0E14] border-b border-gray-800 px-4 lg:px-6 py-3 relative">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+<header class="bg-[#0B0E14] border-b border-gray-800 px-4 sm:px-6 lg:px-8 relative w-full">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 h-14 sm:h-16 lg:h-[68px]">
         <!-- Logo -->
-        <a href="/" class="flex items-center gap-3 shrink-0">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-400 flex items-center justify-center font-black text-white text-xl tracking-tighter shadow-lg shadow-rose-600/30">
+        <a href="/" class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-400 flex items-center justify-center font-black text-white text-base sm:text-lg tracking-tighter shadow-md shadow-rose-600/30">
                 FF
             </div>
             <div>
-                <span class="text-lg font-bold text-white tracking-wide block leading-tight">FF Panel Store</span>
-                <span class="text-xs text-gray-400 block">Fast • Safe • Reliable</span>
+                <span class="text-sm sm:text-base font-bold text-white tracking-wide block leading-tight">FF Panel Store</span>
+                <span class="text-[10px] sm:text-xs text-gray-400 block">Fast • Safe • Reliable</span>
             </div>
         </a>
 
         <!-- Search Bar -->
         <div class="hidden md:flex flex-1 max-w-sm relative">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
             <input type="text" placeholder="Search for services (e.g. Diamond, UID, ID, etc...)" 
-                   class="w-full bg-[#111723] border border-gray-800 rounded-full pl-10 pr-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-500 transition-colors">
+                   class="w-full h-9 bg-[#111723] border border-gray-800 rounded-full pl-9 pr-4 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-500 transition-colors">
         </div>
 
         <!-- Center Nav Links -->
         <nav class="hidden xl:flex items-center gap-1.5">
-            <a href="/" class="px-4 py-1.5 rounded-full text-sm font-medium bg-[#E11D48] text-white flex items-center gap-1.5">
+            <a href="/" class="h-8 sm:h-9 px-3.5 rounded-full text-xs font-semibold bg-[#E11D48] text-white inline-flex items-center gap-1.5 shadow-sm">
                 <i class="fa-solid fa-house text-xs"></i> Home
             </a>
             <a href="/services" class="px-4 py-1.5 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800/60 transition-colors flex items-center gap-1.5">

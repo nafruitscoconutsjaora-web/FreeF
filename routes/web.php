@@ -16,6 +16,7 @@ use App\Controllers\ReferralController;
 use App\Controllers\PaymentController;
 use App\Controllers\UserController;
 use App\Controllers\PageController;
+use App\Controllers\InstallerController;
 
 use App\Controllers\Admin\AdminDashboardController;
 use App\Controllers\Admin\AdminOrderController;
@@ -42,6 +43,13 @@ Router::get('/terms', [PageController::class, 'terms']);
 Router::get('/privacy', [PageController::class, 'privacy']);
 Router::get('/refund', [PageController::class, 'refund']);
 Router::get('/maintenance', [PageController::class, 'maintenance']);
+
+// Web Installer
+Router::get('/install', [InstallerController::class, 'index']);
+Router::get('/installer', [InstallerController::class, 'index']);
+Router::post('/install/test-db', [InstallerController::class, 'testDatabase']);
+Router::post('/install/process', [InstallerController::class, 'processInstallation']);
+Router::get('/install/finish', [InstallerController::class, 'finish']);
 
 // Cart
 Router::get('/cart', [CartController::class, 'index']);

@@ -41,16 +41,16 @@ $isLoggedIn = !empty($_SESSION['user_id']);
 <body class="bg-[#080B11] text-gray-100 min-h-screen flex flex-col antialiased">
 
 <!-- PUBLIC NAVBAR -->
-<header class="bg-[#0B0E14] border-b border-gray-800/80 px-4 lg:px-8 py-3.5 relative">
-    <div class="max-w-[1580px] mx-auto flex items-center justify-between gap-4">
+<header class="bg-[#0B0E14] border-b border-gray-800/80 px-4 sm:px-6 lg:px-8 relative w-full">
+    <div class="max-w-[1580px] mx-auto flex items-center justify-between gap-3 h-14 sm:h-16 lg:h-[68px]">
         <!-- Logo -->
-        <a href="/" class="flex items-center gap-3 shrink-0">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-rose-500 to-rose-400 flex items-center justify-center font-black text-white text-xl tracking-tighter shadow-lg shadow-rose-600/30">
+        <a href="/" class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-rose-500 to-rose-400 flex items-center justify-center font-black text-white text-base sm:text-lg tracking-tighter shadow-md shadow-rose-600/30">
                 FF
             </div>
             <div>
-                <span class="text-lg font-black text-white tracking-wide block leading-tight">FF Panel Store</span>
-                <span class="text-[11px] text-gray-400 block font-medium">Fast • Safe • Reliable</span>
+                <span class="text-sm sm:text-base font-black text-white tracking-wide block leading-tight">FF Panel Store</span>
+                <span class="text-[10px] sm:text-[11px] text-gray-400 block font-medium">Fast • Safe • Reliable</span>
             </div>
         </a>
 
@@ -59,33 +59,36 @@ $isLoggedIn = !empty($_SESSION['user_id']);
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
             <form action="/services" method="GET" class="w-full">
                 <input type="text" name="q" placeholder="Search diamonds, pass, UID..." 
-                       class="w-full bg-[#111723] border border-gray-800 rounded-full pl-9 pr-4 py-2 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-500 transition-colors">
+                       class="w-full h-9 bg-[#111723] border border-gray-800 rounded-full pl-9 pr-4 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-500 transition-colors">
             </form>
         </div>
 
         <!-- Public Navigation Links Only -->
-        <nav class="hidden md:flex items-center gap-1.5">
-            <a href="/" class="px-3.5 py-1.5 rounded-full text-xs font-semibold <?= ($activeNav ?? '') === 'home' ? 'bg-[#E11D48] text-white shadow-sm' : 'text-gray-300 hover:text-white hover:bg-gray-800/60' ?> transition">
-                <i class="fa-solid fa-house mr-1 text-[11px]"></i> Home
+        <nav class="hidden md:flex items-center gap-1">
+            <a href="/" class="h-8 sm:h-9 px-3.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 <?= ($activeNav ?? '') === 'home' ? 'bg-[#E11D48] text-white shadow-sm' : 'text-gray-300 hover:text-white hover:bg-gray-800/60' ?> transition">
+                <i class="fa-solid fa-house text-[11px]"></i> Home
             </a>
-            <a href="/services" class="px-3.5 py-1.5 rounded-full text-xs font-semibold <?= ($activeNav ?? '') === 'services' ? 'bg-[#E11D48] text-white shadow-sm' : 'text-gray-300 hover:text-white hover:bg-gray-800/60' ?> transition">
-                <i class="fa-solid fa-layer-group mr-1 text-[11px]"></i> Services
+            <a href="/services" class="h-8 sm:h-9 px-3.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 <?= ($activeNav ?? '') === 'services' ? 'bg-[#E11D48] text-white shadow-sm' : 'text-gray-300 hover:text-white hover:bg-gray-800/60' ?> transition">
+                <i class="fa-solid fa-layer-group text-[11px]"></i> Services
             </a>
-            <a href="/services" class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/60 transition">
-                <i class="fa-solid fa-fire mr-1 text-[11px] text-rose-500"></i> Categories
+            <a href="/services" class="h-8 sm:h-9 px-3.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 text-gray-300 hover:text-white hover:bg-gray-800/60 transition">
+                <i class="fa-solid fa-fire text-rose-500 text-[11px]"></i> Categories
             </a>
-            <a href="/about" class="px-3.5 py-1.5 rounded-full text-xs font-semibold <?= ($activeNav ?? '') === 'about' ? 'bg-[#E11D48] text-white shadow-sm' : 'text-gray-300 hover:text-white hover:bg-gray-800/60' ?> transition">
-                <i class="fa-solid fa-circle-info mr-1 text-[11px]"></i> About
+            <a href="/about" class="h-8 sm:h-9 px-3.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 <?= ($activeNav ?? '') === 'about' ? 'bg-[#E11D48] text-white shadow-sm' : 'text-gray-300 hover:text-white hover:bg-gray-800/60' ?> transition">
+                <i class="fa-solid fa-circle-info text-[11px]"></i> About
             </a>
-            <a href="/contact" class="px-3.5 py-1.5 rounded-full text-xs font-semibold <?= ($activeNav ?? '') === 'contact' ? 'bg-[#E11D48] text-white shadow-sm' : 'text-gray-300 hover:text-white hover:bg-gray-800/60' ?> transition">
-                <i class="fa-solid fa-envelope mr-1 text-[11px]"></i> Contact
+            <a href="/contact" class="h-8 sm:h-9 px-3.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 <?= ($activeNav ?? '') === 'contact' ? 'bg-[#E11D48] text-white shadow-sm' : 'text-gray-300 hover:text-white hover:bg-gray-800/60' ?> transition">
+                <i class="fa-solid fa-envelope text-[11px]"></i> Contact
+            </a>
+            <a href="/install" class="h-8 sm:h-9 px-3 rounded-full text-xs font-medium inline-flex items-center gap-1 text-gray-400 hover:text-rose-400 hover:bg-gray-800/40 transition" title="Web Installer">
+                <i class="fa-solid fa-screwdriver-wrench text-[10px]"></i> Installer
             </a>
         </nav>
 
         <!-- Right Side: Clean Public CTA -->
-        <div class="flex items-center gap-2.5">
+        <div class="flex items-center gap-2 sm:gap-2.5">
             <!-- Cart Button (Public) -->
-            <a href="/cart" class="w-9 h-9 rounded-full bg-[#111723] border border-gray-800 flex items-center justify-center text-gray-300 hover:text-white hover:border-gray-700 transition relative">
+            <a href="/cart" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#111723] border border-gray-800 flex items-center justify-center text-gray-300 hover:text-white hover:border-gray-700 transition relative shrink-0">
                 <i class="fa-solid fa-cart-shopping text-xs"></i>
                 <?php if (!empty($_SESSION['cart'])): ?>
                     <span class="absolute -top-1 -right-1 w-4 h-4 bg-rose-600 rounded-full text-[9px] font-bold text-white flex items-center justify-center shadow">
@@ -96,39 +99,40 @@ $isLoggedIn = !empty($_SESSION['user_id']);
 
             <?php if ($isLoggedIn): ?>
                 <!-- Clean Link to User Dashboard (NO wallet balance, NO notification count, NO profile dropdown on landing) -->
-                <a href="/dashboard" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 transition shadow-md shadow-rose-600/30 flex items-center gap-1.5">
-                    <i class="fa-solid fa-chart-pie text-xs"></i> My Dashboard
+                <a href="/dashboard" class="h-8 sm:h-9 px-3.5 sm:px-4 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 transition shadow-md shadow-rose-600/30 inline-flex items-center gap-1.5 shrink-0">
+                    <i class="fa-solid fa-chart-pie text-xs"></i> <span>Dashboard</span>
                 </a>
             <?php else: ?>
                 <!-- Logged Out Visitor Buttons -->
-                <a href="/login" class="px-3.5 py-2 rounded-xl text-xs font-bold text-gray-200 hover:text-white bg-[#111723] border border-gray-800 hover:border-gray-700 transition">
+                <a href="/login" class="h-8 sm:h-9 px-3 sm:px-3.5 rounded-xl text-xs font-bold text-gray-200 hover:text-white bg-[#111723] border border-gray-800 hover:border-gray-700 transition inline-flex items-center shrink-0">
                     Sign In
                 </a>
-                <a href="/register" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 transition shadow-md shadow-rose-600/30 flex items-center gap-1">
-                    Get Started <i class="fa-solid fa-arrow-right text-[10px] ml-0.5"></i>
+                <a href="/register" class="h-8 sm:h-9 px-3 sm:px-4 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 transition shadow-md shadow-rose-600/30 inline-flex items-center gap-1 shrink-0">
+                    <span>Get Started</span> <i class="fa-solid fa-arrow-right text-[10px] ml-0.5 hidden xs:inline"></i>
                 </a>
             <?php endif; ?>
 
             <!-- Mobile Hamburger Button -->
-            <button type="button" id="mobilePublicMenuBtn" class="md:hidden w-9 h-9 rounded-xl bg-[#111723] border border-gray-800 text-gray-300 hover:text-white flex items-center justify-center">
-                <i class="fa-solid fa-bars text-sm"></i>
+            <button type="button" id="mobilePublicMenuBtn" aria-label="Toggle menu" class="md:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#111723] border border-gray-800 text-gray-300 hover:text-white flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-bars text-xs sm:text-sm"></i>
             </button>
         </div>
     </div>
 
     <!-- Mobile Navigation Drawer (Normal document flow toggle) -->
-    <div id="mobilePublicMenu" class="hidden md:hidden pt-4 pb-2 border-t border-gray-800/80 mt-3 space-y-2">
-        <a href="/" class="block px-3 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600/20 text-rose-400">Home</a>
-        <a href="/services" class="block px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/40">Services</a>
-        <a href="/services" class="block px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/40">Categories</a>
-        <a href="/about" class="block px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/40">About Us</a>
-        <a href="/contact" class="block px-3 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/40">Contact Support</a>
+    <div id="mobilePublicMenu" class="hidden md:hidden pt-3 pb-3 border-t border-gray-800/80 mt-1 space-y-1.5 animate-fadeIn">
+        <a href="/" class="block px-3.5 py-2 rounded-xl text-xs font-semibold <?= ($activeNav ?? '') === 'home' ? 'bg-rose-600 text-white' : 'text-gray-300 hover:text-white hover:bg-gray-800/40' ?>">Home</a>
+        <a href="/services" class="block px-3.5 py-2 rounded-xl text-xs font-semibold <?= ($activeNav ?? '') === 'services' ? 'bg-rose-600 text-white' : 'text-gray-300 hover:text-white hover:bg-gray-800/40' ?>">Services & Diamond Top-Ups</a>
+        <a href="/services" class="block px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:text-white hover:bg-gray-800/40">Categories</a>
+        <a href="/about" class="block px-3.5 py-2 rounded-xl text-xs font-semibold <?= ($activeNav ?? '') === 'about' ? 'bg-rose-600 text-white' : 'text-gray-300 hover:text-white hover:bg-gray-800/40' ?>">About Store</a>
+        <a href="/contact" class="block px-3.5 py-2 rounded-xl text-xs font-semibold <?= ($activeNav ?? '') === 'contact' ? 'bg-rose-600 text-white' : 'text-gray-300 hover:text-white hover:bg-gray-800/40' ?>">Contact & 24/7 Support</a>
+        <a href="/install" class="block px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:text-white hover:bg-gray-800/40">Web Installer (/install)</a>
         <?php if ($isLoggedIn): ?>
-            <a href="/dashboard" class="block px-3 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 mt-2">Go to My Dashboard →</a>
+            <a href="/dashboard" class="block px-3.5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-rose-500 mt-2 text-center">Open My Dashboard →</a>
         <?php else: ?>
-            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800">
+            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
                 <a href="/login" class="text-center py-2 rounded-xl bg-[#111723] border border-gray-800 text-xs font-bold text-white">Sign In</a>
-                <a href="/register" class="text-center py-2 rounded-xl bg-rose-600 text-xs font-bold text-white">Get Started</a>
+                <a href="/register" class="text-center py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 text-xs font-bold text-white">Get Started</a>
             </div>
         <?php endif; ?>
     </div>

@@ -4,7 +4,7 @@
  */
 $act = $activeAdminNav ?? 'dashboard';
 ?>
-<aside class="w-64 bg-[#0D111A] border-r border-gray-800 p-4 space-y-6 hidden md:block shrink-0 min-h-[calc(100vh-60px)]">
+<aside id="adminSidebar" class="w-64 bg-[#0D111A] border-r border-gray-800 p-4 space-y-6 hidden md:block shrink-0 min-h-[calc(100vh-60px)]">
     <!-- Main Menu -->
     <div class="space-y-1">
         <span class="text-[10px] font-black uppercase tracking-wider text-gray-500 px-3 block mb-1">Core Operations</span>
